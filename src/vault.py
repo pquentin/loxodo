@@ -114,20 +114,26 @@ class Vault(object):
             self.raw_fields[raw_field.raw_type] = raw_field
             if (raw_field.raw_type == 0x01):
                 self._uuid = uuid.UUID(bytes_le=raw_field.raw_value)
-            if (raw_field.raw_type == 0x02):
-                self._group = raw_field.raw_value.decode('utf_8', 'replace')
-            if (raw_field.raw_type == 0x03):
+            elif (raw_field.raw_type == 0x02):
+                self._group = raw_field.raw_value.decode('utf_8')
+            elif (raw_field.raw_type == 0x03):
                 self._title = raw_field.raw_value.decode('utf_8', 'replace')
-            if (raw_field.raw_type == 0x04):
+            elif (raw_field.raw_type == 0x04):
                 self._user = raw_field.raw_value.decode('utf_8', 'replace')
-            if (raw_field.raw_type == 0x05):
+            elif (raw_field.raw_type == 0x05):
                 self._notes = raw_field.raw_value.decode('utf_8', 'replace')
-            if (raw_field.raw_type == 0x06):
+            elif (raw_field.raw_type == 0x06):
                 self._passwd = raw_field.raw_value.decode('utf_8', 'replace')
-            if ((raw_field.raw_type == 0x0c) and (raw_field.raw_len == 4)):
+            elif (raw_field.raw_type == 0x07):
+                pass  # Ignoring raw field 7 (last saved by user)
+            elif (raw_field.raw_type == 0x08):
+                pass  # Ignoring raw field 8 (last saved on host)
+            elif ((raw_field.raw_type == 0x0c) and (raw_field.raw_len == 4)):
                 self._last_mod = struct.unpack("<L", raw_field.raw_value)[0]
-            if (raw_field.raw_type == 0x0d):
+            elif (raw_field.raw_type == 0x0d):
                 self._url = raw_field.raw_value.decode('utf_8', 'replace')
+            else:
+                raise ValueError("Unnkown field {}".format(raw_field.raw_type))
 
         def mark_modified(self):
             self.last_mod = int(time.time())

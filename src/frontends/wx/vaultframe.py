@@ -45,8 +45,10 @@ class VaultFrame(wx.Frame):
             self.InsertColumn(0, _("Title"))
             self.InsertColumn(1, _("Username"))
             self.InsertColumn(2, _("Group"))
+            self.InsertColumn(3, _("Notes"))
             self.SetColumnWidth(0, 256)
             self.SetColumnWidth(1, 128)
+            self.SetColumnWidth(2, 256)
             self.SetColumnWidth(2, 256)
             self.sort_function = lambda e1, e2: cmp(e1.group.lower(), e2.group.lower())
             self.update_fields()
@@ -67,7 +69,13 @@ class VaultFrame(wx.Frame):
                 return self.displayed_entries[item].user
             if (col == 2):
                 return self.displayed_entries[item].group
+            if (col == 3):
+                return self.displayed_entries[item].notes
             return "--"
+
+        def MacReopenApp(self):
+            """Called when the doc icon is clicked, and ???"""
+            self.GetTopWindow().Raise()
 
         def update_fields(self):
             """

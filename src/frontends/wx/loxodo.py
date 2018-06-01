@@ -24,8 +24,31 @@ from .wxlocale import setup_wx_locale
 from .loadframe import LoadFrame
 
 
+class LoxodoApp(wx.App):
+    def OnInit(self):
+	print('Init')
+	return True
+
+    def MacOpenFile(self, filename):
+	print('Open', filename)
+
+    def OnActivate(self, event):
+        # if this is an activate event, rather than something else, like iconize.
+	print('on active')
+        if event.GetActive():
+	    print('get active')
+	    self.GetTopWindow().Raise()
+	print('skip')
+        event.Skip()
+
+    def MacReopenApp(self):
+	"""Called when the doc icon is clicked, and ???"""
+	print('Reopen')
+	self.GetTopWindow().Raise()
+
+
 def main():
-    app = wx.App(False)
+    app = LoxodoApp(False)
     setup_wx_locale()
     mainframe = LoadFrame(None, -1, "")
     app.SetTopWindow(mainframe)
